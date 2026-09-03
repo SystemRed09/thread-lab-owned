@@ -1,0 +1,18 @@
+# CIS501 - Lab: Multi-threaded Execution and Resource Sharing
+root = true
+
+[*.cs]
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+charset = utf-8
+
+# The method names in Threads.Core (openRead, openWrite, close, readLine,
+# writeLine) are camelCase on purpose: they match the class diagram used in
+# lecture and in the assignment. Visual Studio's default naming rule (IDE1006)
+# wants PascalCase and flags every one of them.
+#
+# Turning it off here so the solution opens clean. Renaming the methods would
+# silence it too, but then the code and the diagram would disagree, which is a
+# worse problem than a style warning.
+dotnet_diagnostic.IDE1006.severity = none
