@@ -40,29 +40,40 @@ namespace Threads.Core
 
         public FileController(File f) { theFile = f; }
 
+        private static readonly object Gate = new object();
+
         // Opens the file for reading and returns a handle to it.
         // Returns null if the file cannot be opened right now.
-        public Reader openRead()
-        {
-            Reader r = null;
-            theFile.initRead();
-            r = theFile;
+        public Reader openRead() {
+            lock (Gate) {
+                object Gate = new object();
+                if (theFile.status != Status.Closed) { return null; }
+
+                Reader r = null;
+                theFile.initRead();
+                theFile.status = Status.Reading;
+                r = theFile;
             return r;
+            }
         }
 
         // Opens the file for writing and returns a handle to it.
         // Returns null if the file cannot be opened right now.
-        public Writer openWrite()
-        {
-            Writer w = theFile;
-            theFile.initWrite();
-            w = theFile;
-            return w;
+        public Writer openWrite() {
+            lock (Gate) {
+                if (theFile.status != Status.Closed) { return null; }
+                Writer w = theFile;
+                theFile.initWrite();
+                theFile.status = Status.Writing;
+                w = theFile;
+                return w;
+            }
         }
 
         // Releases the file so that another thread may open it.
         public void close()
         {
+            theFile.status = Status.Closed;
         }
     }
 }

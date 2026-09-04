@@ -38,15 +38,14 @@ namespace Threads.Race
         public TokenObject(int supply) { tokens = supply; }
 
         // Returns true if a token was available and has been seized.
-        public bool getToken()
-        {
-            bool outcome = false;
-            if (tokens > 0)
-            {
-                tokens = tokens - 1;
-                outcome = true;
+        private static readonly object Gate = new object();
+        public bool getToken() {
+            lock (Gate) {
+                bool has = tokens > 0;
+                if (has) { tokens--; }
+                return has;
             }
-            return outcome;
+            
         }
 
         // How many tokens remain. Should never be negative.

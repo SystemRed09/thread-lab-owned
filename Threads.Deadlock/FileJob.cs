@@ -107,12 +107,12 @@ namespace Threads.Deadlock
         // a deadline and reports failure instead of waiting forever.
         private object Acquire(FileController c, Use use)
         {
-            while (true)
-            {
+            for (int i=0; i < 10; i++) {
                 object handle = (use == Use.Read) ? (object)c.openRead() : (object)c.openWrite();
                 if (handle != null) { return handle; }
                 Thread.Sleep(5);   // busy; try again shortly
             }
+            return null;
         }
 
         private void Log(string message)

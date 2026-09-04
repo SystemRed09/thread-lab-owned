@@ -20,6 +20,8 @@ namespace Threads.Core
         private List<string> lines;  // the "file" is a list of strings
         private int count;           // counts the lines read/written so far
 
+        public Status status = Status.Closed;
+
         public File() { lines = new List<string>(); }
 
         // initializes the file for reading its lines one by one:
